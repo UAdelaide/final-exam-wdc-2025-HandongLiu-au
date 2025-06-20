@@ -97,6 +97,7 @@
         }
 
         onMounted(() => {
+          userId.value = await getCurrentUser();
           loadWalkRequests();
         });
 
