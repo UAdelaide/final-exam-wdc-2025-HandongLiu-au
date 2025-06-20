@@ -4,14 +4,17 @@ const fs      = require('fs');
 const path    = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 8080;
 
 async function bootstrap() {
+
   const db = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
     database: 'dogwalks'
+
   });
+
 
   const sql = fs.readFileSync(path.join(__dirname, 'dogwalks.sql'), 'utf8');
   await db.query(sql);
@@ -24,6 +27,7 @@ bootstrap().catch(err => {
   process.exit(1);
 });
 
+// /api/dogs
 app.get('/api/dogs', async (req, res) => {
   try {
     const [rows] = await app.locals.db.execute(`
@@ -40,6 +44,7 @@ app.get('/api/dogs', async (req, res) => {
   }
 });
 
+// /api/walkrequests/open
 app.get('/api/walkrequests/open', async (req, res) => {
   try {
     const [rows] = await app.locals.db.execute(`
@@ -57,10 +62,11 @@ app.get('/api/walkrequests/open', async (req, res) => {
     res.json(rows);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Failed to fetch open walk requests' });
+    res.status(500).json({ error: 'Failed to fetch walk requests' });
   }
 });
 
+// /api/walkers/summary
 app.get('/api/walkers/summary', async (req, res) => {
   try {
     const [rows] = await app.locals.db.execute(`
