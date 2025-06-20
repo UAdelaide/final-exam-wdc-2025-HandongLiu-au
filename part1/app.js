@@ -12,7 +12,7 @@ async function initDb() {
     user: 'root',
     database: 'DogWalkService'
   });
-  console.log('✅ Connected to MySQL: DogWalkService');
+  console.log(' Connected to MySQL: DogWalkService');
 }
 // /api/dogs
 app.get('/api/dogs', async (req, res) => {
@@ -74,6 +74,10 @@ app.get('/api/walkers/summary', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+initDb().then(() => {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
+  });
+}).catch(err => {
+  console.error('❌ MySQL connection failed:', err);
 });
