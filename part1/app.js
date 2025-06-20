@@ -16,7 +16,7 @@ let db;
     });
     console.log(' Connected to MySQL');
   } catch (err) {
-    console.error('❌ MySQL connection failed:', err);
+    console.error(' MySQL connection failed:', err);
     process.exit(1);
   }
 })();
