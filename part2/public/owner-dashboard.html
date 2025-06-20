@@ -145,14 +145,14 @@
 
     const myDogs = ref([]);
 
-async function loadMyDogs() {
-  try {
-    const res = await fetch('/api/walks/mydogs');
-    myDogs.value = await res.json();
-  } catch (err) {
-    error.value = 'Failed to load dog list';
-  }
-}
+    async function loadMyDogs() {
+      try {
+        const res = await fetch('/api/walks/mydogs');
+        myDogs.value = await res.json();
+      } catch (err) {
+        error.value = 'Failed to load dog list';
+      }
+    }
 
 
 
