@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 
 
 
-// POST a new user (simple signup)
+
 router.post('/register', async (req, res) => {
   const { username, email, password, role } = req.body;
 
@@ -30,6 +30,7 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ error: 'Registration failed' });
   }
 });
+
 
 router.get('/me', (req, res) => {
   if (!req.session.user) {
