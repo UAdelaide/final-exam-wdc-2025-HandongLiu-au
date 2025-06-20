@@ -142,6 +142,22 @@
       }
     }).mount('#app');
 
+
+    const myDogs = ref([]);
+
+async function loadMyDogs() {
+  try {
+    const res = await fetch('/api/walks/mydogs');
+    myDogs.value = await res.json();
+  } catch (err) {
+    error.value = 'Failed to load dog list';
+  }
+}
+
+
+
+
+
     document.getElementById('logoutBtn').addEventListener('click', async () => {
   try {
     const res = await fetch('/api/users/logout', { method: 'POST' });
