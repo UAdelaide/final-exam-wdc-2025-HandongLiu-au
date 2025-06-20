@@ -12,6 +12,21 @@ router.get('/', async (req, res) => {
   }
 });
 
+
+router.get('/mydogs', async (req, res) => {
+  const user = req.session.user;
+  if (!user || user.role !== 'owner') {
+    return res.status(401).json({ error: 'Not authorized' });
+  }
+
+  try {
+    const [rows] = await db.query('SELECT dog_id, name FROM Dogs WHERE owner_id = ?', [user.user_id]);
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to load dogs' });
+  }
+});
+
 // POST a new user (simple signup)
 router.post('/register', async (req, res) => {
   const { username, email, password, role } = req.body;
@@ -70,18 +85,6 @@ router.post('/logout', (req, res) => {
 });
 
 
-router.get('/mydogs', async (req, res) => {
-  const user = req.session.user;
-  if (!user || user.role !== 'owner') {
-    return res.status(401).json({ error: 'Not authorized' });
-  }
 
-  try {
-    const [rows] = await db.query('SELECT dog_id, name FROM Dogs WHERE owner_id = ?', [user.user_id]);
-    res.json(rows);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to load dogs' });
-  }
-});
 
 module.exports = router;
