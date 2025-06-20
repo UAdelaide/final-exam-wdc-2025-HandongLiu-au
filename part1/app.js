@@ -1,13 +1,9 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
-const path = require('path');
-
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
 
 let db;
 
@@ -16,16 +12,20 @@ let db;
     db = await mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      database: 'DogWalkService'
+      database: 'DogWalkService',
     });
-    console.log('Connected to MySQL');
+    console.log(' Connected to MySQL');
   } catch (err) {
-    console.error('MySQL connection failed:', err);
+    console.error('❌ MySQL connection failed:', err);
     process.exit(1);
   }
 })();
 
-// GET /api/dogs
+app.get('/', (req, res) => {
+  res.send('API server is running.');
+});
+
+// /api/dogs
 app.get('/api/dogs', async (req, res) => {
   try {
     const [rows] = await db.execute(`
@@ -40,7 +40,7 @@ app.get('/api/dogs', async (req, res) => {
   }
 });
 
-// GET /api/walkrequests/open
+// /api/walkrequests/open
 app.get('/api/walkrequests/open', async (req, res) => {
   try {
     const [rows] = await db.execute(`
@@ -58,7 +58,7 @@ app.get('/api/walkrequests/open', async (req, res) => {
   }
 });
 
-// GET /api/walkers/summary
+// /api/walkers/summary
 app.get('/api/walkers/summary', async (req, res) => {
   try {
     const [rows] = await db.execute(`
@@ -80,5 +80,5 @@ app.get('/api/walkers/summary', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
