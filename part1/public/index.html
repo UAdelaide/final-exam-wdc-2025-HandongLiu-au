@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title> Dog of the Night!</title>
+  <script src="https://unpkg.com/vue@3"></script>
+  <style>
+    /* Dark/neon “cyberpunk” style */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #111;              /* deep black */
+      color: #0f0;                         /* neon green */
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+    }
+    #app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      min-height: 100vh;
+      animation: pulse 2s infinite alternate;
+    }
+    @keyframes pulse {
+      from { filter: hue-rotate(0deg); }
+      to   { filter: hue-rotate(90deg); }
+    }
+    h1 {
+      margin: 20px 0;
+      font-size: 3rem;
+      text-shadow: 0 0 8px #0f0, 0 0 16px #0f0;
+    }
+    /* Glitch effect on the “marquee” line */
+    .scroll {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      box-sizing: border-box;
+      color: #f0f;
+      font-size: 1.5rem;
+      animation: scroll 10s linear infinite, glitch 1.5s infinite;
+    }
+    @keyframes scroll {
+      0%   { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    @keyframes glitch {
+      0% { text-shadow: 2px 0 2px #0ff, -2px 0 2px #f0f; }
+      50% { text-shadow: -2px 0 2px #0ff, 2px 0 2px #f0f; }
+    }
+    img {
+      width: 320px;
+      height: 320px;
+      border: 3px solid #0f0;
+      border-radius: 8px;
+      margin: 20px 0;
+      animation: shake 0.3s infinite alternate,
+                 blur 3s infinite ease-in-out;
+    }
+    @keyframes shake {
+      from { transform: translateX(-5px) rotate(-1deg); }
+      to   { transform: translateX(5px) rotate(1deg); }
+    }
+    @keyframes blur {
+      0%,100% { filter: blur(0); }
+      50%     { filter: blur(2px); }
+    }
+    .info {
+      background: rgba(0,0,0,0.5);
+      padding: 15px;
+      border: 2px dashed #f0f;
+      width: 80%;
+      max-width: 400px;
+      margin-bottom: 20px;
+      line-height: 2rem;
+      font-size: 1.1rem;
+    }
+    .btn {
+      margin: 5px;
+      padding: 8px 12px;
+      background: #222;
+      border: 2px solid #0f0;
+      cursor: crosshair;
+      font-family: 'Courier New', monospace;
+      color: #0f0;
+      text-transform: uppercase;
+      animation: flicker 0.2s infinite;
+    }
+    @keyframes flicker {
+      0%,100% { opacity: 1; }
+      50%     { opacity: 0.3; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="scroll">▶▶▶ DOG OF THE NIGHT — CLICK FOR A NEW SPECTACLE ▶▶▶</div>
+    <h1>🖤 Dog of the Night 🖤</h1>
+    <!-- intentionally empty alt to break accessibility -->
+    <img :src="dogUrl" alt="" />
+    <div class="info">
+      <p>Name: HDL final web q9</p>
+      <p>Date: 20/06/2025</p>
+      <p>City: U o Adelaide</p>
+    </div>
+    <div>
+      <button class="btn" @click="fetchDog()">RELOAD</button>
+      <button class="btn" @click="fetchDog()">AGAIN</button>
+      <button class="btn" @click="fetchDog()">☢</button>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return { dogUrl: '' };
+      },
+      methods: {
+        fetchDog() {
+          fetch('https://dog.ceo/api/breeds/image/random')
+            .then(r => r.json())
+            .then(j => { this.dogUrl = j.message; })
+            .catch(() => { this.dogUrl = ''; });
+        }
+      },
+      mounted() {
+        this.fetchDog();
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
