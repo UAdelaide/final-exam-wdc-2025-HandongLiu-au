@@ -41,17 +41,18 @@ router.post('/login', async (req, res) => {
 
   try {
     const [rows] = await db.query(`
-      SELECT user_id, username, role FROM Users
-      WHERE username = ? AND password_hash = ?
-    `, [username, password]);
+      SELECT user_id, username, role, password_hash FROM Users
+      WHERE username = ?
+    `, [username]);
 
-    if (rows.length === 0) {
+    if (rows.length === 0 || rows[0].password_hash !== password) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    req.session.user = rows[0];
+    const { password_hash, ...userWithoutPassword } = rows[0];
+    req.session.user = userWithoutPassword;
 
-    res.json({ message: 'Login successful', user: rows[0] });
+    res.json({ message: 'Login successful', user: userWithoutPassword });
   } catch (error) {
     res.status(500).json({ error: 'Login failed' });
   }
