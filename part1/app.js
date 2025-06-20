@@ -11,7 +11,7 @@ async function bootstrap() {
   const db = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    database: 'dogwalks'
+    database: 'DogWalkService'
 
   });
 
