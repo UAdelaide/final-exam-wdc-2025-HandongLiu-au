@@ -19,6 +19,22 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/mydogs', async (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'owner') {
+    return res.status(403).json({ error: 'Only owners can access this' });
+  }
+
+  try {
+    const [rows] = await db.query(
+      'SELECT dog_id, name FROM Dogs WHERE owner_id = ?',
+      [req.session.user.user_id]
+    );
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch dogs' });
+  }
+});
+
 // POST a new walk request (from owner)
 router.post('/', async (req, res) => {
   const { dog_id, requested_time, duration_minutes, location } = req.body;
