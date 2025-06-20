@@ -140,9 +140,19 @@
     }).mount('#app');
 
     document.getElementById('logoutBtn').addEventListener('click', async () => {
-    await fetch('/api/users/logout', { method: 'POST' });
-    window.location.href = 'index.html';
-  });
+  try {
+    const res = await fetch('/api/users/logout', { method: 'POST' });
+    const result = await res.json();
+
+    if (res.ok) {
+      window.location.href = 'index.html';
+    } else {
+      alert(result.error || 'Logout failed');
+    }
+  } catch (err) {
+    alert('Network error during logout');
+  }
+});
 
 
 
