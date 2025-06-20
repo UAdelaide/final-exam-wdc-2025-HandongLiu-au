@@ -1,32 +1,19 @@
 const express = require('express');
-const mysql   = require('mysql2/promise');
-const fs      = require('fs');
-const path    = require('path');
+const mysql = require('mysql2/promise');
 
 const app = express();
 const PORT = 8080;
 
-async function bootstrap() {
+let db;
 
-  const db = await mysql.createConnection({
+async function initDb() {
+  db = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
     database: 'DogWalkService'
-
   });
-
-
-  const sql = fs.readFileSync(path.join(__dirname, 'dogwalks.sql'), 'utf8');
-  await db.query(sql);
-
-  app.locals.db = db;
+  console.log('✅ Connected to MySQL: DogWalkService');
 }
-
-bootstrap().catch(err => {
-  console.error('Initialization failed', err);
-  process.exit(1);
-});
-
 // /api/dogs
 app.get('/api/dogs', async (req, res) => {
   try {
