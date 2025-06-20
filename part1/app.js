@@ -79,5 +79,5 @@ initDb().then(() => {
     console.log(`🚀 Server running at http://localhost:${PORT}`);
   });
 }).catch(err => {
-  console.error('❌ MySQL connection failed:', err);
+  console.error(' MySQL connection failed:', err);
 });
